@@ -2,37 +2,168 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.movie-panels {
+  display:flex;
+  align-items:stretch;
+  height:100%;
+  background-color:gold;
+  flex-direction: row;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+html, body {
+  min-width:318px;
+}
+
+html, body, #root, .App, .grid-game, .movie-container {
+  height: 100%
+}
+.movie-panel{
+  flex:50%;
+  flex-basis: 50%;
+  flex-grow: 0;
+  margin-left: 1px;
+  margin-right:1px;
+  background-color: gold;
+  height:100%
+}
+@media only screen and (max-width: 900px) {
+  .movie-panels {
+    flex-direction: column;
+  }  
+  .movie-panel {
+    height:50%
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.movie-header {
+  height:18%;
+  font-weight: bold;
+  color:silver;
+  -webkit-text-stroke: 1px black;
+  font-size: 1.6vw;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, .5));
 }
 
-.App-link {
-  color: #61dafb;
+.movie-title{
+  height:78%;
+  font-weight: bold;
+  color:white;
+  -webkit-text-stroke: 2px black;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, .5));
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.movie-info h2 { 
+  padding: 0 5px;
+  display: inline-block;
+  font-size: 4vh;
+  font-weight: bold;
+  color:white;
+  -webkit-text-stroke: 2px black;
+  stroke:black;
+  stroke-width:2px;
+  outline: 3px double grey;
+  box-shadow: 5px 5px 15px 5px #000000;
+  background: linear-gradient(to bottom, rgb(0, 0, 0, 1), rgba(0, 0, 0, .5));
+}
+
+.movie-info h2 .rating {
+  font-size: 6vh;
+}
+.movie-info h2 .runtime {
+  margin: 0 10px;
+}
+
+.movie-info h2 .ratingBlurred {
+  font-size: 6vh;
+  -webkit-filter: blur(4px);
+	-o-filter: blur(4px);
+	-moz-filter: blur(4px);
+	-ms-filter: blur(4px);
+  -webkit-user-select: none; /* Safari */        
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none;
+	filter: blur(7px);
+}
+
+.movie-info h2 .runtimeBlurred {
+  margin: 0 10px;
+  -webkit-filter: blur(4px);
+	-o-filter: blur(4px);
+	-moz-filter: blur(4px);
+	-ms-filter: blur(4px);
+  -webkit-user-select: none; /* Safari */        
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none;
+	filter: blur(7px);
+}
+
+.movie-panel p {
+  font-weight:bolder;
+  font-size:20px;
+  
+  color:white;
+  -webkit-text-stroke: 1px black;
+}
+
+.game-buttons {
+  display:inline-block;
+  outline: 3px double grey;
+  box-shadow: 5px 5px 15px 5px #000000;
+  background: linear-gradient(to bottom, rgb(0, 0, 0, .5), rgba(0, 0, 0, .4));
+  margin:auto;
+}
+
+.game-buttons .MuiButtonBase-root{
+  display:block;
+  box-sizing: border-box;
+  -webkit-text-stroke: .8px white;
+  font-size: 3vh;
+  
+  margin: 6px;
+  width: 300px;
+  height: 60px;
+}
+
+
+.incorrect {background-color: red;}
+.correct {background-color:blue;}
+
+.blurred-text{
+  -webkit-filter: blur(4px);
+	-o-filter: blur(4px);
+	-moz-filter: blur(4px);
+	-ms-filter: blur(4px);
+  -webkit-user-select: none; /* Safari */        
+-moz-user-select: none; /* Firefox */
+-ms-user-select: none; /* IE10+/Edge */
+user-select: none;
+	filter: blur(4px);
+}
+
+
+html, body{
+  background-color: lightgray;
+}
+
+
+.MainMenu {
+  top:40%;
+  left:50%;
+  position: absolute;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  outline: 3px double red;
+  padding-inline: 10px;
+  
+}
+
+
+.loading {
+  top:40%;
+  left:50%;
+  position: absolute;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }
