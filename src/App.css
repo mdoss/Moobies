@@ -14,7 +14,7 @@ html, body {
   min-width:318px;
 }
 
-html, body, #root, .App, .grid-game, .movie-container {
+html, body, #root, .App, .game, .grid-game, .movie-container {
   height: 100%
 }
 .movie-panel{
@@ -159,11 +159,19 @@ html, body{
   
 }
 
-
 .loading {
   top:40%;
   left:50%;
   position: absolute;
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
+}
+
+.high-score {
+  font-weight: bolder;
+  font-size: 6vw;
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  -webkit-text-stroke: 1px white;
 }

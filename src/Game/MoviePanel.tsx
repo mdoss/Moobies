@@ -16,7 +16,6 @@ interface MovieProps {
 var isReady = false;
 
 const MoviePanel = forwardRef((props: MovieProps,ref: React.ForwardedRef<HTMLDivElement>)=> {//({movie}: {movie: IMovie}) {;
-
   const [isDisplayed, setIsDisplayed] = useState(false);
   var genres = props.movie.genres.split(',');
   var imagePath = `https://image.tmdb.org/t/p/original${props.movie.posterPath}`;

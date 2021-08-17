@@ -4,6 +4,7 @@ import Menu from './Game/Menu';
 import Game from './Game/Game';
 import End from './Game/End';
 import './App.css';
+import HighScore from './Game/HighScore';
 
 function App() {
   const [isStart, setIsStart] = useState<boolean>(false);
@@ -57,10 +58,14 @@ function App() {
 
   return (
     <div className="App">
+      <div className="game">
         {showMenu && <Menu handlePlay={handlePlay} handleDifficulty={handleDifficulty} handleMode={handleMode} mode={mode} difficulty={difficulty}/>}
         {showGame && <Game handleEnd={handleEnd} scoreInc={scoreInc} mode={mode} difficulty={difficulty}/>}
         {showEnd && <End handlePlay={handlePlay} handleDifficulty={handleDifficulty} handleMode={handleMode} mode={mode} difficulty={difficulty} score={score}/>}
+      </div>
+      <HighScore mode={mode} difficulty={difficulty} score={score}/>
     </div>
+    
   );
 }
 

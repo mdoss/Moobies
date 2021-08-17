@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import logo from './logo.svg';
 import {Button, FormControl, InputLabel, makeStyles, MenuItem, Select} from '@material-ui/core';
+import posterPlaceholder from '../Images/movieplaceholder.png'; 
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -13,7 +14,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 function End(props: any){
   const classes = useStyles();
     return (
@@ -22,7 +22,6 @@ function End(props: any){
       <h1>You lost man.........</h1>
       <h2>Score: {props.score}</h2>
           <Button variant="contained" color="secondary" size="large" onClick={props.handlePlay}>Replay</Button>
-
           <div>
           <FormControl className={classes.formControl} color="secondary">
     <InputLabel shrink id="demo-simple-select-placeholder-label-label">
