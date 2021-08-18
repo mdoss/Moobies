@@ -9,11 +9,11 @@ function HighScore(props: any){
 }, [props.score]);
 
   function getDiff() {
-    if(props.difficulty == 'Easy')
+    if(props.difficulty === 'Easy')
       return 0;
-    else if(props.difficulty == 'Medium')
+    else if(props.difficulty === 'Medium')
       return 1;
-    else if(props.difficulty == 'Hard')
+    else if(props.difficulty === 'Hard')
       return 2;
     else
       return -1;
@@ -21,9 +21,9 @@ function HighScore(props: any){
 
   function getIndex() {
     var index = getDiff();
-    if(props.mode == 'runtimeMinutes')
+    if(props.mode === 'runtimeMinutes')
       index += 3;
-    else if(props.mode == 'startYear')
+    else if(props.mode === 'startYear')
       index += 6;
     return index;
   }
@@ -31,20 +31,16 @@ function HighScore(props: any){
   function checkHighScore(score: number, mode: string) {
     console.log('score: ' + score)
     var currHighScore = 0;
-    var temp;
-    var diff = getDiff();
     var index = getIndex();
 
     if(ratingHighs != null)
     {
-      console.log(ratingHighs)
       currHighScore = parseInt(ratingHighs[index]);
     } else {
       var arr = new Array(9).fill(0);
       setRatingHighs(arr);
       localStorage.setItem('highScores', JSON.stringify(arr));
     }
-    console.log(currHighScore);
 
     if(score > currHighScore) {
       var newScores = [
@@ -52,7 +48,6 @@ function HighScore(props: any){
         score,
         ...ratingHighs.slice(index + 1)
       ]
-      console.log('scores: ' + newScores);
       localStorage.setItem('highScores', JSON.stringify(newScores));
       setRatingHighs(newScores);
     }

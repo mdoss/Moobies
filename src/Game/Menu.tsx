@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import logo from './logo.svg';
 import {Button, FormControl, InputLabel, makeStyles, MenuItem, Select} from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({

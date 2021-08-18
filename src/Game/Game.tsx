@@ -1,12 +1,13 @@
-import React, { EventHandler, useState, useRef } from 'react';
+import React, {useState} from 'react';
 import {Button} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 import MoviePanel from './MoviePanel';
 import FlipMove from 'react-flip-move';
-import { setSyntheticLeadingComments } from 'typescript';
 import Loader from "react-loader-spinner";
 
+const api = 'https://nameless-gorge-59165.herokuapp.com/api/imdb/'
+const api2 = 'http://localhost:5001/api/imdb/'
 //crashes if next movie isnt loaded by the time panels switch
 //search for mem leaks in console.
 export interface IMovie {
@@ -51,7 +52,6 @@ function Game(props: any){
     const [moviesLoaded, setMoviesLoaded] = useState(false);
     const [moviesIds, setMoviesIds]= useState<string[]>([""]);
     const [isBlurred, setIsBlurred] = useState(true);
-    const [lost, setLost] = useState(false);
     const [buttonHigherAnswer, setButtonHigherAnswer] = useState(useStyles().highlowButtons);
     const [buttonLowerAnswer, setButtonLowerAnswer] = useState(useStyles().highlowButtons);
     const [movies, setMovies] = useState<IMovie[]>([]);
@@ -76,7 +76,7 @@ function Game(props: any){
             currRuntime = movies[movies.length - 1].runtimeMinutes;
             currYear = movies[movies.length - 1].startYear;
         }
-        await axios.get(`https://nameless-gorge-59165.herokuapp.com/api/imdb/`, { params: {rating: currRating, runtime: currRuntime, year: currYear, difficulty: props.difficulty, mode: props.mode, same: wasSameData}})
+        await axios.get(api, { params: {rating: currRating, runtime: currRuntime, year: currYear, difficulty: props.difficulty, mode: props.mode, same: wasSameData}})
             .then(res => {
                 if(moviesIds.includes(res.data.tconst)) {
                     getMovie();
@@ -108,25 +108,23 @@ function Game(props: any){
                 rightMovieData = movies[1].startYear;
                 break;
             default:
-                console.log('none');
+                console.log('SOMETHING WRONG');
         }
-        console.log(props.mode + " " + leftMovieData + " == " + rightMovieData);
         if(leftMovieData == rightMovieData)
             setWasSameData(true);
         else
             setWasSameData(false);
 
-        if((event.currentTarget.id == 'Higher' && leftMovieData > rightMovieData)
-            || event.currentTarget.id == 'Lower' && leftMovieData < rightMovieData) {
-                setLost(true)
+        if((event.currentTarget.id === 'Higher' && leftMovieData > rightMovieData)
+            || event.currentTarget.id === 'Lower' && leftMovieData < rightMovieData) {
                 isWrong = true;
-                if(event.currentTarget.id == 'Higher')
+                if(event.currentTarget.id === 'Higher')
                     setButtonHigherAnswer(classes.highlowButtonsWrong);
                 else
                     setButtonLowerAnswer(classes.highlowButtonsWrong);
         } else {
             props.scoreInc();
-            if(event.currentTarget.id == 'Higher')
+            if(event.currentTarget.id === 'Higher')
                 setButtonHigherAnswer(classes.highlowButtonsRight);
             else 
                 setButtonLowerAnswer(classes.highlowButtonsRight);
@@ -138,8 +136,9 @@ function Game(props: any){
         setIsBlurred(false);
         await timeout(aniDelay);
         setIsBlurred(true);
-        if(isWrong == true) {
+        if(isWrong === true) {
             props.handleEnd();
+            return;
         }
         setMovies([movies[1], movies[2]]);
         setButtonDisabled(false);
@@ -160,7 +159,6 @@ function Game(props: any){
 
     async function testin(){
         setButtonDisabled(false);
-        console.log('testin')
         //await timeout(1000);
     }
 
@@ -175,7 +173,7 @@ function Game(props: any){
             <div className="movie-container" style={{display: moviesLoaded ? 'block': 'none'}}>
                 <FlipMove className="movie-panels" onFinishAll={()=>testin()} staggerDelayBy={200} leaveAnimation="fade" enterAnimation="fade" appearAnimation="elevator">
                     {displayedMovies.map((movie, index) => {
-                        return index == 0 ?
+                        return index === 0 ?
                         <MoviePanel key={movie._id} mode={props.mode} movie={movie} imageLoaded={imageLoaded}/>
                         : 
                         <MoviePanel key={movie._id} mode={props.mode} isBlurred={isBlurred} movie={movie} imageLoaded={imageLoaded}>

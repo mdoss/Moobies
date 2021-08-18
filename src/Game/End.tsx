@@ -1,9 +1,6 @@
-import React, { useState } from 'react';
-import logo from './logo.svg';
+import React from 'react';
 import {Button, FormControl, InputLabel, makeStyles, MenuItem, Select} from '@material-ui/core';
-import posterPlaceholder from '../Images/movieplaceholder.png'; 
-import { createTheme } from '@material-ui/core/styles';
-import { ThemeProvider } from '@material-ui/styles';
+
 
 const useStyles = makeStyles((theme) => ({
   formControl: {

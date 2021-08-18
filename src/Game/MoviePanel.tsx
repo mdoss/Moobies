@@ -4,7 +4,7 @@ import posterPlaceholder from '../Images/movieplaceholder.png';
 import {MdStar} from 'react-icons/md'
 
 const {Textfit} = require('react-textfit');
-const { getLangNameFromCode, getLangCodeList } = require('language-name-map')
+const { getLangNameFromCode } = require('language-name-map')
 
 interface MovieProps {
     movie: IMovie;
@@ -13,13 +13,12 @@ interface MovieProps {
     children?: any;
     mode: string; 
 }
-var isReady = false;
 
 const MoviePanel = forwardRef((props: MovieProps,ref: React.ForwardedRef<HTMLDivElement>)=> {//({movie}: {movie: IMovie}) {;
   const [isDisplayed, setIsDisplayed] = useState(false);
   var genres = props.movie.genres.split(',');
   var imagePath = `https://image.tmdb.org/t/p/original${props.movie.posterPath}`;
-  var isPosterMissing = props.movie.posterPath == "" ? true : false;
+  var isPosterMissing = props.movie.posterPath === "" ? true : false;
   const titleRef = createRef<HTMLDivElement>();
 
   React.useEffect(() => { //Caches background image
@@ -38,8 +37,7 @@ const MoviePanel = forwardRef((props: MovieProps,ref: React.ForwardedRef<HTMLDiv
   }, [titleRef])
 
   function getModeData() {
-    console.log(props.mode)
-    if(props.mode == 'averageRating') {
+    if(props.mode === 'averageRating') {
       return (
       <h2><MdStar style={{color: 'gold', height:'40px', stroke:'black', strokeWidth:'.5px'}}/>
         {props.isBlurred ? <span className="ratingBlurred">8.8</span>
@@ -49,7 +47,7 @@ const MoviePanel = forwardRef((props: MovieProps,ref: React.ForwardedRef<HTMLDiv
         /10
         </h2>
       );
-    } else if(props.mode == 'runtimeMinutes') {
+    } else if(props.mode === 'runtimeMinutes') {
       return (
         <h2>Runtime:
         {props.isBlurred ? <span className="runtimeBlurred">888</span>
@@ -59,7 +57,7 @@ const MoviePanel = forwardRef((props: MovieProps,ref: React.ForwardedRef<HTMLDiv
         minutes
         </h2>
       );
-    } else if(props.mode == 'startYear') {
+    } else if(props.mode === 'startYear') {
       return (
         <h2>Release year: 
         {props.isBlurred ? <span className="runtimeBlurred">8888</span>
@@ -72,6 +70,8 @@ const MoviePanel = forwardRef((props: MovieProps,ref: React.ForwardedRef<HTMLDiv
     }
   }
 
+  if(isPosterMissing)
+    imagePath = posterPlaceholder;
   return(
     
     <div ref={ref} className="movie-panel" style={{
@@ -82,7 +82,7 @@ const MoviePanel = forwardRef((props: MovieProps,ref: React.ForwardedRef<HTMLDiv
         <div ref={titleRef} className="movie-title">
           {isDisplayed ?
             <Textfit style={{ display: 'block', height: '100%' }} mode="multi" throttle={200}>
-              {props.movie.primaryTitle} {props.mode == 'startYear' ? '': `(${props.movie.startYear})`}
+              {props.movie.primaryTitle} {props.mode === 'startYear' ? '': `(${props.movie.startYear})`}
             </Textfit>
             :
             'loading...'}
