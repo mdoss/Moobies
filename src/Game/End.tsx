@@ -80,7 +80,7 @@ function End(props: any){
           displayEmpty
           className={classes.selectEmpty}
         >
-          <MenuItem value={'averageRating'}>Rating</MenuItem>
+          <MenuItem value={'averageRating'}>Imdb Rating</MenuItem>
           <MenuItem value={'runtimeMinutes'}>Runtime</MenuItem>
           <MenuItem value={'startYear'}>Release Year</MenuItem>
         </Select>
