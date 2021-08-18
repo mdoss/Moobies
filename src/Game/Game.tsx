@@ -7,7 +7,8 @@ import FlipMove from 'react-flip-move';
 import { setSyntheticLeadingComments } from 'typescript';
 import Loader from "react-loader-spinner";
 
-
+//crashes if next movie isnt loaded by the time panels switch
+//search for mem leaks in console.
 export interface IMovie {
     _id: string;
     tconst: string;
@@ -46,7 +47,7 @@ const useStyles = makeStyles({ //also some in .css
     },
 });
 
-function Game(props: any){
+function Game(props: any){ 
     const [moviesLoaded, setMoviesLoaded] = useState(false);
     const [moviesIds, setMoviesIds]= useState<string[]>([""]);
     const [isBlurred, setIsBlurred] = useState(true);
@@ -87,7 +88,7 @@ function Game(props: any){
         })
     }
 
-    async function handleButtons(event: any) { //handles higher or lower TODO: im checking averageratings only, need to do other data as well.
+    async function handleButtons(event: any) { //handles higher or lower
         setButtonDisabled(true);
         var isWrong = false;
         var leftMovieData = -1;
