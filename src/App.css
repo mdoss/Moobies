@@ -149,14 +149,57 @@ html, body{
 
 
 .MainMenu {
-  top:40%;
-  left:50%;
+  top: 40%;
+  left: 50%;
   position: absolute;
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-  outline: 3px double red;
-  padding-inline: 10px;
+  -webkit-transform: translate(-50%,-50%);
+  transform: translate(-50%,-50%);
+  outline: 3px double gold;
+  padding: 10px;
+  margin-top:30px;
+}
+
+.MainMenu h1{
+  -webkit-text-stroke: .3px gold;
+  font-size: 40px;
   
+}
+
+.play-button {
+  display:block;
+  outline: 3px double grey;
+  box-shadow: 5px 5px 15px 3px #000000;
+  background: linear-gradient(to bottom, rgb(0, 0, 0, .5), rgba(0, 0, 0, .4));
+  margin:auto;
+  padding: 2px;
+}
+
+.play-button .MuiButtonBase-root{
+  display:block;
+  box-sizing: border-box;
+  -webkit-text-stroke: .2px white;
+  font-size: 3vh;
+  background-color: gold;
+  color: black;
+  font-weight: bolder;
+  width: 100%;
+  height: 100px;
+}
+
+
+@media only screen and (max-width: 900px) {
+  .MainMenu {
+    min-width: 300px;
+
+  }
+  
+  .play-button, .play-button .MuiButtonBase-root{
+    height:200px;
+  }
+}
+
+.setting-buttons {
+  display: inline;
 }
 
 .loading {
@@ -167,11 +210,13 @@ html, body{
   transform: translate(-50%, -50%);
 }
 
+
 .high-score {
   font-weight: bolder;
-  font-size: 6vw;
+  font-size: 34px;
   position: absolute;
   bottom: 0px;
   right: 0px;
+  margin-right: 5px;
   -webkit-text-stroke: 1px white;
 }

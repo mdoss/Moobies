@@ -169,7 +169,6 @@ function Game(props: any){
 
     var displayedMovies = movies.slice(0,2);
     var classes = useStyles();
-    var class2 = classes.highlowButtons;
     return ( 
         <div className="grid-game">
             <div className="movie-container" style={{display: moviesLoaded ? 'block': 'none'}}>
