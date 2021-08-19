@@ -4,6 +4,11 @@ import Game from './Game/Game';
 import End from './Game/End';
 import './App.css';
 import HighScore from './Game/HighScore';
+import axios from 'axios';
+
+const apiCloud = 'https://nameless-gorge-59165.herokuapp.com'
+const apiLocal = 'http://localhost:5001'
+export const api = apiCloud;
 
 function App() {
 
@@ -13,6 +18,10 @@ function App() {
   const [score, setScore] = useState<number>(0);
   const [difficulty, setDifficulty] = React.useState('Easy');
   const [mode, setMode] = React.useState('averageRating');
+
+  React.useEffect(() => {
+    axios.get(`${api}/users/`)
+  }, [])
 
   function scoreInc() {
     setScore(score => score + 1)

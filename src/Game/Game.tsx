@@ -5,11 +5,11 @@ import axios from 'axios';
 import MoviePanel from './MoviePanel';
 import FlipMove from 'react-flip-move';
 import Loader from "react-loader-spinner";
+import {api} from '../App';
 
-const api = 'https://nameless-gorge-59165.herokuapp.com/api/imdb/'
-const api2 = 'http://localhost:5001/api/imdb/'
 //crashes if next movie isnt loaded by the time panels switch
 //search for mem leaks in console.
+//heroku is idling, 
 export interface IMovie {
     _id: string;
     tconst: string;
@@ -76,7 +76,7 @@ function Game(props: any){
             currRuntime = movies[movies.length - 1].runtimeMinutes;
             currYear = movies[movies.length - 1].startYear;
         }
-        await axios.get(api, { params: {rating: currRating, runtime: currRuntime, year: currYear, difficulty: props.difficulty, mode: props.mode, same: wasSameData}})
+        await axios.get(`${api}/api/imdb/`, { params: {rating: currRating, runtime: currRuntime, year: currYear, difficulty: props.difficulty, mode: props.mode, same: wasSameData}})
             .then(res => {
                 if(moviesIds.includes(res.data.tconst)) {
                     getMovie();
