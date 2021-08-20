@@ -9,7 +9,7 @@ import {api} from '../App';
 
 //crashes if next movie isnt loaded by the time panels switch
 //search for mem leaks in console.
-//heroku is idling, 
+//heroku is idlingccccccccccccccccccccccccccccccccccccccccccccc,ccccc (current fix is waking up dyno at main menu)
 export interface IMovie {
     _id: string;
     tconst: string;
@@ -31,17 +31,17 @@ const useStyles = makeStyles({ //also some in .css
         fontWeight: 'bold',
         fontSize: '2vh',
         '&:hover': {
-            background: 'linear-gradient(to bottom, rgb(0, 0, 0, 1), rgba(0, 0, 0, .2)), linear-gradient(to top, rgb(255, 255, 255, 1), rgba(0, 0, 0, .2))'  
+            background: 'linear-gradient(to bottom, rgb(0, 0, 0, .6), rgba(0, 0, 0, .5)), linear-gradient(to top, rgb(255, 255, 255, 1), rgba(0, 0, 0, .2))'  
         }
     },
     highlowButtonsRight: {
-        background: 'linear-gradient(to top, rgb(0, 204, 0, 1), rgba(0, 204, 0, .2))',
+        background: 'linear-gradient(to top, rgb(0, 204, 0, 1), rgba(0, 204, 0, .6))',
         fontWeight: 'bold',
         fontSize: '2vh',
         color: 'aqua'
     },
     highlowButtonsWrong: {
-        background: 'linear-gradient(to top, rgb(255, 0, 0, 1), rgba(255, 0, 0, .2))',
+        background: 'linear-gradient(to top, rgb(255, 0, 0, 1), rgba(255, 0, 0, .6))',
         fontWeight: 'bold',
         fontSize: '2vh',
         color: 'aqua'
@@ -49,7 +49,9 @@ const useStyles = makeStyles({ //also some in .css
 });
 
 function Game(props: any){ 
-    const [moviesLoaded, setMoviesLoaded] = useState(false);
+    const [initialMoviesLoaded, setInitialMoviesLoaded] = useState(false);
+    const [nextMovieLoaded, setNextMovieLoaded] = useState(false);
+    const [animFinished, setAnimFinished] = useState(false);
     const [moviesIds, setMoviesIds]= useState<string[]>([""]);
     const [isBlurred, setIsBlurred] = useState(true);
     const [buttonHigherAnswer, setButtonHigherAnswer] = useState(useStyles().highlowButtons);
@@ -58,8 +60,10 @@ function Game(props: any){
     const [buttonDisabled, setButtonDisabled] = useState(false);
     const [imgsLoaded, setImgsLoaded] = useState(0);
     const [wasSameData, setWasSameData] = useState(false);
+    //const [gameLost, setGameLost] = useState(false);
 
     var aniDelay = 1000;
+    var gameLost = false;
 
     React.useEffect(() => { //get 3 new movies
         console.log(`movies length: ${movies.length}`);
@@ -107,8 +111,6 @@ function Game(props: any){
                 leftMovieData = movies[0].startYear;
                 rightMovieData = movies[1].startYear;
                 break;
-            default:
-                console.log('SOMETHING WRONG');
         }
         if(leftMovieData == rightMovieData)
             setWasSameData(true);
@@ -117,11 +119,11 @@ function Game(props: any){
 
         if((event.currentTarget.id === 'Higher' && leftMovieData > rightMovieData)
             || event.currentTarget.id === 'Lower' && leftMovieData < rightMovieData) {
-                isWrong = true;
-                if(event.currentTarget.id === 'Higher')
-                    setButtonHigherAnswer(classes.highlowButtonsWrong);
-                else
-                    setButtonLowerAnswer(classes.highlowButtonsWrong);
+            gameLost = true;
+            if(event.currentTarget.id === 'Higher')
+                setButtonHigherAnswer(classes.highlowButtonsWrong);
+            else
+                setButtonLowerAnswer(classes.highlowButtonsWrong);
         } else {
             props.scoreInc();
             if(event.currentTarget.id === 'Higher')
@@ -129,38 +131,49 @@ function Game(props: any){
             else 
                 setButtonLowerAnswer(classes.highlowButtonsRight);
         }
-        revealMovie(isWrong)
+        revealDelay()
     }
 
-    async function revealMovie(isWrong: boolean) { 
+    async function revealDelay() { 
         setIsBlurred(false);
         await timeout(aniDelay);
-        setIsBlurred(true);
-        if(isWrong === true) {
+        setAnimFinished(true);
+        if(gameLost === true) {
             props.handleEnd();
             return;
         }
+    }
+
+    function revealMovie() { 
+        setIsBlurred(true);
+        setNextMovieLoaded(false);
+        setAnimFinished(false);
         setMovies([movies[1], movies[2]]);
+        setImgsLoaded(imgsLoaded => imgsLoaded - 2) //unloads old movies
         setButtonDisabled(false);
         setButtonHigherAnswer(classes.highlowButtons);
         setButtonLowerAnswer(classes.highlowButtons);
     }
+
+    React.useEffect(() => {
+        if(animFinished && nextMovieLoaded) {   //wait until animation and movies loaded
+            revealMovie();
+        }
+    }, [animFinished, nextMovieLoaded])
     
-    function imageLoaded() { 
+    async function imageLoaded() { 
         setImgsLoaded(imgsLoaded => imgsLoaded + 1);
     }
 
     React.useEffect(() => { //Checks to see if all images are preloaded
         console.log('loaded: ' + imgsLoaded)
-        if(imgsLoaded > 1) {
-            setMoviesLoaded(true);
+        if(imgsLoaded > 2) {
+            setNextMovieLoaded(true);
         }
+        else if(imgsLoaded === 2) {
+            setInitialMoviesLoaded(true);
+        } 
     }, [imgsLoaded]);
-
-    async function testin(){
-        setButtonDisabled(false);
-        //await timeout(1000);
-    }
 
     function timeout(delay: number) {
         return new Promise( res => setTimeout(res, delay) );
@@ -170,15 +183,15 @@ function Game(props: any){
     var classes = useStyles();
     return ( 
         <div className="grid-game">
-            <div className="movie-container" style={{display: moviesLoaded ? 'block': 'none'}}>
-                <FlipMove className="movie-panels" onFinishAll={()=>testin()} staggerDelayBy={200} leaveAnimation="fade" enterAnimation="fade" appearAnimation="elevator">
+            <div className="movie-container" style={{display: initialMoviesLoaded ? 'block': 'none'}}>
+                <FlipMove className="movie-panels" onFinishAll={()=>setButtonDisabled(false)} staggerDelayBy={200} leaveAnimation="fade" enterAnimation="fade" appearAnimation="elevator">
                     {displayedMovies.map((movie, index) => {
                         return index === 0 ?
                         <MoviePanel key={movie._id} mode={props.mode} movie={movie} imageLoaded={imageLoaded}/>
                         : 
                         <MoviePanel key={movie._id} mode={props.mode} isBlurred={isBlurred} movie={movie} imageLoaded={imageLoaded}>
                             <div className="game-buttons">
-                                <Button className={buttonHigherAnswer} disabled={buttonDisabled} onClick={(e) => handleButtons(e)} id="Higher" >Higher</Button>
+                                <Button className={buttonHigherAnswer} onClick={(e) => handleButtons(e)} disabled={buttonDisabled} id="Higher" >Higher</Button>
                                 <Button className={buttonLowerAnswer} onClick={(e) => handleButtons(e)} disabled={buttonDisabled} id="Lower" >Lower</Button>
                             </div>
                         </MoviePanel>
@@ -186,7 +199,7 @@ function Game(props: any){
                 </FlipMove>
             </div>
             
-            <div className="loading" style={{display: moviesLoaded ? 'none': 'block'}}>
+            <div className="loading" style={{display: initialMoviesLoaded ? 'none': 'block'}}>
                 <h1 style={{color:"#000"}}>Loading</h1>
                 <Loader
                     type="Circles"
@@ -194,6 +207,9 @@ function Game(props: any){
                     height={50}
                     width={50}
                 />
+            </div>
+            <div style={{display: 'none'}}>
+                {(movies.length > 2)? <MoviePanel movie={movies[2]} imageLoaded={imageLoaded} mode={props.mode}/> : null}
             </div>
         </div>
     );
